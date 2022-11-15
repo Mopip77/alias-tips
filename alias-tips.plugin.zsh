@@ -12,15 +12,17 @@ fi
 #export ZSH_PLUGINS_ALIAS_TIPS_EXPAND=0
 
 _alias_tips__preexec () {
-  local CMD=$1
-  local CMD_EXPANDED=$2
-  if [[ $CMD != $CMD_EXPANDED ]] then # Alias is used
+  local INPUT=$1
+  local EXPAND_INPUT=$2
+  read -A cmdArr <<< $INPUT
+  local COMMAND=${cmdArr[1]}
+  if [[ $INPUT != $EXPAND_INPUT ]] then # Alias is used
     if [[ ${ZSH_PLUGINS_ALIAS_TIPS_REVEAL-0} == 1 ]] \
-    && [[ ${${ZSH_PLUGINS_ALIAS_TIPS_REVEAL_EXCLUDES-()}[(I)$1]} == 0 ]] then # Reveal cmd
+    && [[ ${${ZSH_PLUGINS_ALIAS_TIPS_REVEAL_EXCLUDES-()}[(I)$COMMAND]} == 0 ]] then # Reveal cmd
         local reveal_text=${ZSH_PLUGINS_ALIAS_TIPS_REVEAL_TEXT-Alias for: }
         local color_dark_gray='\e[1;30m'
         local color_reset='\e[0m'
-        echo -e "$color_dark_gray$reveal_text$CMD_EXPANDED $color_reset"
+        echo -e "$color_dark_gray$reveal_text$EXPAND_INPUT $color_reset"
     fi
     if [[ ${ZSH_PLUGINS_ALIAS_TIPS_EXPAND-1} == 0 ]] then
       return 0
