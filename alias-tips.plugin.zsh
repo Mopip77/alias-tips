@@ -12,8 +12,8 @@ fi
 #export ZSH_PLUGINS_ALIAS_TIPS_EXPAND=0
 
 _alias_tips__preexec () {
-  local INPUT=$1
-  local EXPAND_INPUT=$2
+  local INPUT=${(MS)1##[[:graph:]]*[[:graph:]]} # trim whitespace
+  local EXPAND_INPUT=${(MS)2##[[:graph:]]*[[:graph:]]}
   read -A cmdArr <<< $INPUT
   local COMMAND=${cmdArr[1]}
   if [[ $INPUT != $EXPAND_INPUT ]] then # Alias is used
